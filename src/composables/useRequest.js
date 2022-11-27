@@ -1,4 +1,5 @@
 import {reactive} from "vue";
+import {useUserStore} from "../stores/user";
 
 export default function useRequest() {
     const API_URL = import.meta.env.VITE_API_URL
@@ -18,19 +19,30 @@ export default function useRequest() {
         response.message = ''
     }
 
-    const sendRequest = (method, url, data = {}) => {
+    const sendRequest = (method, url, data = {}, auth = true) => {
+        const userStore = useUserStore()
+
         resetResponse()
         response.status = 'loading'
-        fetch(`${API_URL}/${url}`, {
+
+        if (auth)
+            headers = {...headers, 'Authorization': 'Bearer ' + userStore.getAccessToken}
+
+        let options = {
             method: method,
-            headers: headers,
-            body: JSON.stringify(data)
-        }).then((res) => {
+            headers: headers
+        }
+        if (method === 'GET')
+            options = {...options, body: JSON.stringify(data)}
+
+        fetch(`${API_URL}/${url}`, options).then((res) => {
             response.status = (res.ok ? 'success' : 'error')
             res.json().then((res) => {
                 response.status === 'success' ? (response.data = res) : (response.message = res.message)
             })
         })
+
+        return response
     }
 
     return {sendRequest, response}

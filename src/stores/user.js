@@ -14,6 +14,8 @@ export const useUserStore = defineStore('user', () => {
     const getAccessToken = computed(() => tokens.value.access_token)
     const getRefreshToken = computed(() => tokens.value.refresh_token)
 
+    const isLoggedIn = computed(() => tokens.value.access_token !== '')
+
     function setName(name) {
         name.value = name
     }
@@ -27,5 +29,12 @@ export const useUserStore = defineStore('user', () => {
         tokens.value.refresh_token = token
     }
 
-    return { name, email, tokens, getAccessToken, setName, setEmail, setAccessToken, setRefreshToken }
+    function logout() {
+        name.value = ''
+        email.value = ''
+        tokens.value.access_token = ''
+        tokens.value.refresh_token = ''
+    }
+
+    return { name, email, tokens, getName, getEmail, getAccessToken, getRefreshToken, isLoggedIn, setName, setEmail, setAccessToken, setRefreshToken, logout }
 })
