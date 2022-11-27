@@ -42,7 +42,7 @@ const data = reactive({
 const {sendRequest, response} = useRequest()
 
 const submitRegisterForm = () => {
-  sendRequest('POST', 'register', data)
+  sendRequest('POST', 'register', data, false)
 }
 
 watch(response, (newResponse) => {

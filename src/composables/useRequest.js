@@ -32,7 +32,7 @@ export default function useRequest() {
             method: method,
             headers: headers
         }
-        if (method === 'GET')
+        if (method !== 'GET')
             options = {...options, body: JSON.stringify(data)}
 
         fetch(`${API_URL}/${url}`, options).then((res) => {

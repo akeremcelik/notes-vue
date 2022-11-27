@@ -32,7 +32,7 @@ const {sendRequest, response} = useRequest()
 const userStore = useUserStore()
 
 const submitLoginForm = () => {
-  sendRequest('POST', 'login', data)
+  sendRequest('POST', 'login', data, false)
 }
 
 watch(response, (newResponse) => {

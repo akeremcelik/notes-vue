@@ -16,17 +16,17 @@ export const useUserStore = defineStore('user', () => {
 
     const isLoggedIn = computed(() => tokens.value.access_token !== '')
 
-    function setName(name) {
-        name.value = name
+    function setName(newName) {
+        name.value = newName
     }
-    function setEmail(email) {
-        email.value = email
+    function setEmail(newEmail) {
+        email.value = newEmail
     }
-    function setAccessToken(token) {
-        tokens.value.access_token = token
+    function setAccessToken(newAccessToken) {
+        tokens.value.access_token = newAccessToken
     }
-    function setRefreshToken(token) {
-        tokens.value.refresh_token = token
+    function setRefreshToken(newRefreshToken) {
+        tokens.value.refresh_token = newRefreshToken
     }
 
     function logout() {
