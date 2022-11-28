@@ -1,5 +1,5 @@
 <template>
-{{ userStore.getName === '' ? 'Loading...' : userStore.getName }}
+{{ userStore.getName ?? 'Loading...' }}
 </template>
 
 <script setup>
