@@ -1,5 +1,6 @@
 import {reactive} from "vue";
 import {useUserStore} from "../stores/user";
+import router from "../router";
 
 export default function useRequest() {
     const API_URL = import.meta.env.VITE_API_URL
@@ -36,10 +37,15 @@ export default function useRequest() {
             options = {...options, body: JSON.stringify(data)}
 
         fetch(`${API_URL}/${url}`, options).then((res) => {
-            response.status = (res.ok ? 'success' : 'error')
-            res.json().then((res) => {
-                response.status === 'success' ? (response.data = res) : (response.message = res.message)
-            })
+            if (res.status === 401) {
+                userStore.logout()
+                router.push('/login')
+            } else {
+                response.status = (res.ok ? 'success' : 'error')
+                res.json().then((res) => {
+                    response.status === 'success' ? (response.data = res) : (response.message = res.message)
+                })
+            }
         })
 
         return response
