@@ -7,7 +7,8 @@ export default function useRequest() {
     const response = reactive({
         status: '',
         data: '',
-        message: ''
+        message: '',
+        params: {}
     })
     let headers = {
         'Accept': 'application/json',
@@ -18,6 +19,7 @@ export default function useRequest() {
         response.status = ''
         response.data = ''
         response.message = ''
+        response.params = {}
     }
 
     const sendRequest = (method, url, data = {}, auth = true) => {
@@ -41,6 +43,9 @@ export default function useRequest() {
                 userStore.logout()
                 router.push('/login')
             } else {
+                response.params.method = method
+                response.params.url = url
+
                 response.status = (res.ok ? 'success' : 'error')
                 res.json().then((res) => {
                     response.status === 'success' ? (response.data = res) : (response.message = res.message)
