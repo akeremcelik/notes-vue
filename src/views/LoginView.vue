@@ -15,6 +15,7 @@
         <button type="submit">Login</button>
       </div>
     </form>
+    <button type="button" @click="autoLogin">Auto Login</button>
   </div>
 </template>
 
@@ -46,6 +47,12 @@ watch(response, (newResponse) => {
     alert(newResponse.message)
   }
 })
+
+const autoLogin = () => {
+  data.email = 'test@test.com'
+  data.password = 'test'
+  submitLoginForm()
+}
 </script>
 
 <style scoped>

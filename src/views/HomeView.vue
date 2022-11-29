@@ -17,7 +17,6 @@ const userStore = useUserStore()
 sendRequest('GET', 'user')
 
 watch(response, (newResponse) => {
-  console.log(newResponse)
   if (newResponse.status === 'success') {
     if (newResponse.params.method === 'GET' && newResponse.params.url === 'user') {
       if (newResponse.data !== '') {
