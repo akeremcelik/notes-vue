@@ -3,6 +3,9 @@
     {{ userStore.getName ?? 'Loading...' }}
     <button type="button" v-if="userStore.getName" @click="logout">Logout</button>
   </div>
+  <div>
+    <NoteList />
+  </div>
 </template>
 
 <script setup>
@@ -10,6 +13,7 @@ import useRequest from "../composables/useRequest";
 import {watch} from "vue";
 import {useUserStore} from "../stores/user";
 import router from "../router";
+import NoteList from "../components/NoteList.vue"
 
 const {sendRequest, response} = useRequest()
 const userStore = useUserStore()

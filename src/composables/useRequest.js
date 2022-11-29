@@ -26,6 +26,8 @@ export default function useRequest() {
         const userStore = useUserStore()
 
         resetResponse()
+        response.params.method = method
+        response.params.url = url
         response.status = 'loading'
 
         if (auth)
@@ -43,9 +45,6 @@ export default function useRequest() {
                 userStore.logout()
                 router.push('/login')
             } else {
-                response.params.method = method
-                response.params.url = url
-
                 response.status = (res.ok ? 'success' : 'error')
                 res.json().then((res) => {
                     response.status === 'success' ? (response.data = res) : (response.message = res.message)
