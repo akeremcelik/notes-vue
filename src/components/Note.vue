@@ -1,8 +1,15 @@
 <template>
-<div>
-  <h4>#{{id}} - {{name}}</h4>
-  <p>{{content}}<br />{{updated_at}}</p>
-</div>
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">{{name}}</h5>
+        <p class="card-text">{{content}}</p>
+      </div>
+      <div class="card-footer">
+        <small class="text-muted">Last updated {{updated_at}}</small>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
