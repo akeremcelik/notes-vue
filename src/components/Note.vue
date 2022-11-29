@@ -6,13 +6,15 @@
         <p class="card-text">{{content}}</p>
       </div>
       <div class="card-footer">
-        <small class="text-muted">Last updated {{updated_at}}</small>
+        <small class="text-muted">Last updated {{moment(updated_at).format('MMM Do YY')}}</small>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import moment from 'moment'
+
 const {id, name, content, updated_at} = defineProps({
   id: Number,
   name: String,
