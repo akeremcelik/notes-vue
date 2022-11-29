@@ -55,5 +55,13 @@ export default function useRequest() {
         return response
     }
 
-    return {sendRequest, response}
+    const checkMethodAndUrl = (method, url) => {
+        return (response.params.method === method && response.params.url === url)
+    }
+
+    const isLoading = (method, url) => {
+        return (checkMethodAndUrl(method, url) && response.status === 'loading')
+    }
+
+    return {sendRequest, response, checkMethodAndUrl, isLoading}
 }

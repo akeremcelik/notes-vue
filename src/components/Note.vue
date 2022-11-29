@@ -1,7 +1,7 @@
 <template>
 <div>
   <h4>#{{id}} - {{name}}</h4>
-  <p>{{content}}, {{updated_at}}</p>
+  <p>{{content}}<br />{{updated_at}}</p>
 </div>
 </template>
 

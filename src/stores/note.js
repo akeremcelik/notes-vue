@@ -21,5 +21,9 @@ export const useNoteStore = defineStore('notes', () => {
         notes.value = notes.value.filter((note) => note.id !== id)
     }
 
-    return { notes, getNotes, findNote, setNotes, addNote, deleteNote }
+    function resetNotes() {
+        notes.value = null
+    }
+
+    return { notes, getNotes, findNote, setNotes, addNote, deleteNote, resetNotes }
 })

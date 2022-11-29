@@ -1,7 +1,12 @@
 <template>
   <div>
-    {{ userStore.getName ?? 'Loading...' }}
-    <button type="button" v-if="userStore.getName" @click="logout">Logout</button>
+    <span v-if="isLoading('GET', 'user')">
+      Loading...
+    </span>
+    <span v-else-if="userStore.getName">
+      {{ userStore.getName }}
+      <button type="button" @click="logout">Logout</button>
+    </span>
   </div>
   <div>
     <NoteList />
@@ -14,22 +19,25 @@ import {watch} from "vue";
 import {useUserStore} from "../stores/user";
 import router from "../router";
 import NoteList from "../components/NoteList.vue"
+import {useNoteStore} from "../stores/note";
 
-const {sendRequest, response} = useRequest()
+const {sendRequest, response, checkMethodAndUrl, isLoading} = useRequest()
 const userStore = useUserStore()
+const noteStore = useNoteStore()
 
 sendRequest('GET', 'user')
 
 watch(response, (newResponse) => {
   if (newResponse.status === 'success') {
-    if (newResponse.params.method === 'GET' && newResponse.params.url === 'user') {
+    if (checkMethodAndUrl('GET', 'user')) {
       if (newResponse.data !== '') {
         const responseData = newResponse.data.data
         userStore.setName(responseData.name)
         userStore.setEmail(responseData.email)
       }
-    } else if (newResponse.params.method === 'POST' && newResponse.params.url === 'logout') {
+    } else if (checkMethodAndUrl('POST', 'logout')) {
       userStore.logout()
+      noteStore.resetNotes()
       router.push('/login')
     }
   } else if (newResponse.status === 'error' && newResponse.message !== '') {
