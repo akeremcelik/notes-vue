@@ -1,16 +1,6 @@
 <template>
-  <div>
-    <span v-if="isLoading('GET', 'user')">
-      Loading...
-    </span>
-    <span v-else-if="userStore.getName">
-      {{ userStore.getName }}
-      <button type="button" @click="logout">Logout</button>
-    </span>
-  </div>
-  <div>
-    <NoteList />
-  </div>
+  <Header @logout="logout" />
+  <NoteList />
 </template>
 
 <script setup>
@@ -20,8 +10,9 @@ import {useUserStore} from "../stores/user";
 import router from "../router";
 import NoteList from "../components/NoteList.vue"
 import {useNoteStore} from "../stores/note";
+import Header from "../components/Header.vue"
 
-const {sendRequest, response, checkMethodAndUrl, isLoading} = useRequest()
+const {sendRequest, response, checkMethodAndUrl} = useRequest()
 const userStore = useUserStore()
 const noteStore = useNoteStore()
 
