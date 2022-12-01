@@ -8,8 +8,12 @@
       <div class="card-footer d-flex justify-content-between">
         <small class="text-muted">Last updated {{moment(updated_at).format('MMM Do YY')}}</small>
         <div>
-          <Icon name="IconTrash" width="16" height="16" color="red" />
-          <Icon name="IconPencil" width="16" height="16" color="blue" />
+          <button class="btn p-0 me-1">
+            <Icon name="IconTrash" width="18" height="18" color="red" />
+          </button>
+          <button class="btn p-0">
+            <Icon name="IconPencil" width="18" height="18" color="green" />
+          </button>
         </div>
       </div>
     </div>
