@@ -5,8 +5,12 @@
         <h5 class="card-title">{{name}}</h5>
         <p class="card-text">{{content}}</p>
       </div>
-      <div class="card-footer">
+      <div class="card-footer d-flex justify-content-between">
         <small class="text-muted">Last updated {{moment(updated_at).format('MMM Do YY')}}</small>
+        <div>
+          <Icon name="IconTrash" width="16" height="16" color="red" />
+          <Icon name="IconPencil" width="16" height="16" color="blue" />
+        </div>
       </div>
     </div>
   </div>
@@ -14,6 +18,7 @@
 
 <script setup>
 import moment from 'moment'
+import Icon from "../components/Icon.vue"
 
 const {id, name, content, updated_at} = defineProps({
   id: Number,

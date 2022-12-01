@@ -5,7 +5,7 @@
       Loading...
     </div>
     <div v-else-if="noteStore.getNotes">
-      <div class="row row-cols-1 row-cols-md-3 g-4">
+      <div class="row row-cols-1 row-cols-md-4 g-4">
         <Note v-for="note in noteStore.getNotes" :id="note.id" :name="note.name" :content="note.content" :updated_at="note.updated_at" />
       </div>
     </div>
