@@ -48,11 +48,7 @@
 </template>
 
 <script setup>
-const {width, height, color} = defineProps({
-  width: Number,
-  height: Number,
-  color: String
-})
+const {width, height, color} = defineProps(['width', 'height', 'color'])
 </script>
 
 <style>

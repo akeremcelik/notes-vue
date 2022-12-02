@@ -28,12 +28,7 @@ import useRequest from "../composables/useRequest";
 import {useNoteStore} from "../stores/note";
 import {watch} from "vue";
 
-const {id, name, content, updated_at} = defineProps({
-  id: Number,
-  name: String,
-  content: String,
-  updated_at: Date
-})
+const {id, name, content, updated_at} = defineProps(['id', 'name', 'content', 'updated_at'])
 
 const {sendRequest, response, checkMethodAndUrl} = useRequest()
 const noteStore = useNoteStore()
