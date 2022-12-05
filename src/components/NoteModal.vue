@@ -57,8 +57,10 @@ watch(response, (newResponse) => {
   if (newResponse.status === 'success') {
     if (checkMethodAndUrl('PATCH', `notes/${id}`)) {
       noteStore.updateNote(id, note)
-      emit('toggleNoteModalActivity')
+    } else if (checkMethodAndUrl('POST', `notes`)) {
+      noteStore.addNote({...note, id: newResponse.data.data.id, updated_at: newResponse.data.data.updated_at})
     }
+    emit('toggleNoteModalActivity')
   }
 })
 </script>

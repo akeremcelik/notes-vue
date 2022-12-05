@@ -37,7 +37,7 @@ const submitLoginForm = () => {
 }
 
 watch(response, (newResponse) => {
-  if (newResponse.status === 'success' && newResponse.data !== '') {
+  if (newResponse.status === 'success') {
     const responseData = newResponse.data
     userStore.setAccessToken(responseData.access_token)
     userStore.setRefreshToken(responseData.refresh_token)

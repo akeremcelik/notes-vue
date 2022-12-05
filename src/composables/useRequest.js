@@ -45,10 +45,10 @@ export default function useRequest() {
                 userStore.logout()
                 router.push('/login')
             } else {
-                response.status = (res.ok ? 'success' : 'error')
+                let status = (res.ok ? 'success' : 'error')
                 res.json().then((res) => {
-                    response.status === 'success' ? (response.data = res) : (response.message = res.message)
-                })
+                    status === 'success' ? (response.data = res) : (response.message = res.message)
+                }).finally(() => response.status = status)
             }
         })
 

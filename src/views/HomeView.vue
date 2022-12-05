@@ -19,11 +19,9 @@ sendRequest('GET', 'user')
 watch(response, (newResponse) => {
   if (newResponse.status === 'success') {
     if (checkMethodAndUrl('GET', 'user')) {
-      if (newResponse.data !== '') {
-        const responseData = newResponse.data.data
-        userStore.setName(responseData.name)
-        userStore.setEmail(responseData.email)
-      }
+      const responseData = newResponse.data.data
+      userStore.setName(responseData.name)
+      userStore.setEmail(responseData.email)
     } else if (checkMethodAndUrl('POST', 'logout')) {
       userStore.logout()
       router.push('/login')
