@@ -1,7 +1,10 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import {useNoteStore} from "./note";
 
 export const useUserStore = defineStore('user', () => {
+    const noteStore = useNoteStore()
+
     const name = ref(null)
     const email = ref(null)
     const tokens = ref({
@@ -34,6 +37,8 @@ export const useUserStore = defineStore('user', () => {
         email.value = null
         tokens.value.access_token = null
         tokens.value.refresh_token = null
+
+        noteStore.resetNotes()
     }
 
     return { name, email, tokens, getName, getEmail, getAccessToken, getRefreshToken, isLoggedIn, setName, setEmail, setAccessToken, setRefreshToken, logout }

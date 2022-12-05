@@ -9,12 +9,10 @@ import {watch} from "vue";
 import {useUserStore} from "../stores/user";
 import router from "../router";
 import NoteList from "../components/NoteList.vue"
-import {useNoteStore} from "../stores/note";
 import Header from "../components/Header.vue"
 
 const {sendRequest, response, checkMethodAndUrl} = useRequest()
 const userStore = useUserStore()
-const noteStore = useNoteStore()
 
 sendRequest('GET', 'user')
 
@@ -28,7 +26,6 @@ watch(response, (newResponse) => {
       }
     } else if (checkMethodAndUrl('POST', 'logout')) {
       userStore.logout()
-      noteStore.resetNotes()
       router.push('/login')
     }
   } else if (newResponse.status === 'error' && newResponse.message !== '') {
