@@ -5,9 +5,10 @@ export const useNoteStore = defineStore('notes', () => {
     const notes = ref(null)
 
     const getNotes = computed(() => notes.value)
-    const findNote = computed((id) => {
-        return notes.value.map((note) => note.id === id)
-    })
+
+    function findNote(id) {
+        return notes.value.filter((note) => note.id === id)[0]
+    }
 
     function setNotes(newNotes) {
         notes.value = newNotes
@@ -15,6 +16,11 @@ export const useNoteStore = defineStore('notes', () => {
 
     function addNote(newNote) {
         notes.value.push(newNote)
+    }
+
+    function updateNote(id, newNote) {
+        findNote(id).name = newNote.name
+        findNote(id).content = newNote.content
     }
 
     function deleteNote(id) {
@@ -25,5 +31,5 @@ export const useNoteStore = defineStore('notes', () => {
         notes.value = null
     }
 
-    return { notes, getNotes, findNote, setNotes, addNote, deleteNote, resetNotes }
+    return { notes, getNotes, findNote, setNotes, addNote, updateNote, deleteNote, resetNotes }
 })

@@ -11,7 +11,7 @@
           <button class="btn p-0 me-1" @click="showAlert(id, name)">
             <Icon name="IconTrash" width="18" height="18" color="red" />
           </button>
-          <button class="btn p-0">
+          <button class="btn p-0" @click="emit('toggleNoteModalActivity', id)">
             <Icon name="IconPencil" width="18" height="18" color="green" />
           </button>
         </div>
@@ -29,6 +29,7 @@ import {useNoteStore} from "../stores/note";
 import {watch} from "vue";
 
 const {id, name, content, updated_at} = defineProps(['id', 'name', 'content', 'updated_at'])
+const emit = defineEmits(['toggleNoteModalActivity'])
 
 const {sendRequest, response, checkMethodAndUrl} = useRequest()
 const noteStore = useNoteStore()
