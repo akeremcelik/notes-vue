@@ -21,8 +21,11 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="emit('toggleNoteModalActivity')">Close</button>
-          <button type="button" class="btn" :class="{'btn-primary': id, 'btn-success': !id}" @click="submitNoteModalForm">{{id ? 'Update' : 'Create'}}</button>
+          <button type="button" class="btn btn-secondary" :class="{'disabled': id ? isLoading('PATCH', `notes/${id}`) : isLoading('POST', `notes`)}" data-dismiss="modal" @click="emit('toggleNoteModalActivity')">Close</button>
+          <button type="button" class="btn" :class="{'btn-primary': id, 'btn-success': !id, 'disabled': id ? isLoading('PATCH', `notes/${id}`) : isLoading('POST', `notes`)}" @click="submitNoteModalForm">
+            {{id ? 'Update' : 'Create'}}
+            <Spinner v-if="id ? isLoading('PATCH', `notes/${id}`) : isLoading('POST', `notes`)" />
+          </button>
         </div>
       </div>
     </div>
@@ -34,6 +37,8 @@
 import {useNoteStore} from "../stores/note";
 import {reactive, watch} from "vue"
 import useRequest from "../composables/useRequest";
+import Swal from 'sweetalert2'
+import Spinner from "../components/Spinner.vue"
 
 const emit = defineEmits(['toggleNoteModalActivity'])
 const {id} = defineProps(['id'])
@@ -57,8 +62,26 @@ watch(response, (newResponse) => {
   if (newResponse.status === 'success') {
     if (checkMethodAndUrl('PATCH', `notes/${id}`)) {
       noteStore.updateNote(id, note)
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'The note has been updated',
+        showConfirmButton: false,
+        timer: 1000,
+        width: '350px',
+        height: '150px'
+      })
     } else if (checkMethodAndUrl('POST', `notes`)) {
       noteStore.addNote({...note, id: newResponse.data.data.id, updated_at: newResponse.data.data.updated_at})
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'The note has been created',
+        showConfirmButton: false,
+        timer: 1000,
+        width: '350px',
+        height: '150px'
+      })
     }
     emit('toggleNoteModalActivity')
   }
