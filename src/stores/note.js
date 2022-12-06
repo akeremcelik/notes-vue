@@ -7,7 +7,7 @@ export const useNoteStore = defineStore('notes', () => {
     const getNotes = computed(() => notes.value)
 
     function findNote(id) {
-        return notes.value.filter((note) => note.id === id)[0]
+        return notes.value.find((note) => note.id === id)
     }
 
     function setNotes(newNotes) {
