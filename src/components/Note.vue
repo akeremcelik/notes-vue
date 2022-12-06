@@ -26,13 +26,14 @@ import Icon from "../components/Icon.vue"
 import Swal from 'sweetalert2'
 import useRequest from "../composables/useRequest";
 import {useNoteStore} from "../stores/note";
-import {watch} from "vue";
+import {watch, ref, nextTick} from "vue";
 
 const {id, name, content, updated_at} = defineProps(['id', 'name', 'content', 'updated_at'])
 const emit = defineEmits(['toggleNoteModalActivity'])
 
 const {sendRequest, response, checkMethodAndUrl} = useRequest()
 const noteStore = useNoteStore()
+const selectedNoteId = ref()
 
 const showAlert = (id, name) => {
   Swal.fire({
@@ -45,15 +46,18 @@ const showAlert = (id, name) => {
     confirmButtonText: 'Yes, delete it!'
   }).then((result) => {
     if (result.isConfirmed) {
-      sendRequest('DELETE', `notes/${id}`)
+      selectedNoteId.value = id
+      nextTick().then(function () {
+        sendRequest('DELETE', `notes/${id}`)
+      })
     }
   })
 }
 
 watch(response, (newResponse) => {
   if (newResponse.status === 'success') {
-    if (checkMethodAndUrl('DELETE', `notes/${id}`)) {
-      noteStore.deleteNote(id)
+    if (checkMethodAndUrl('DELETE', `notes/${selectedNoteId.value}`)) {
+      noteStore.deleteNote(selectedNoteId.value)
       Swal.fire(
           'Deleted!',
           'Your note has been deleted.',
