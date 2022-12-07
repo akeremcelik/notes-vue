@@ -58,11 +58,15 @@ watch(response, (newResponse) => {
   if (newResponse.status === 'success') {
     if (checkMethodAndUrl('DELETE', `notes/${selectedNoteId.value}`)) {
       noteStore.deleteNote(selectedNoteId.value)
-      Swal.fire(
-          'Deleted!',
-          'Your note has been deleted.',
-          'success'
-      )
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'The note has been deleted',
+        showConfirmButton: false,
+        timer: 1000,
+        width: '350px',
+        height: '150px'
+      })
     }
   }
 })

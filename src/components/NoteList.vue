@@ -1,5 +1,5 @@
 <template>
-  <NoteModal v-if="noteModal.activity" :id="noteModal.id" @toggleNoteModalActivity="toggleNoteModalActivity" />
+  <NoteModal :activity="noteModal.activity" :id="noteModal.id" @toggleNoteModalActivity="toggleNoteModalActivity" />
   <div class="p-5">
     <h4 class="text-secondary">Note List</h4>
     <div v-if="isLoading('GET', 'notes')">
