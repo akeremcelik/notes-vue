@@ -107,7 +107,7 @@ watch(props, (newProps) => {
 })
 
 watch(note, (newNote) => {
-  if (newNote.name !== '' && noteFirstName.value === '') {
+  if (props.id && newNote.name !== '' && noteFirstName.value === '') {
     noteFirstName.value = newNote.name
   }
 })
