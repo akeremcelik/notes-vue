@@ -21,7 +21,7 @@ export const useNoteStore = defineStore('notes', () => {
     function updateNote(id, newNote) {
         notes.value = notes.value.map((note) => {
             if (id === note.id) {
-                return {...note, name: newNote.name, content: newNote.content}
+                return {...note, ...newNote}
             }
             return note
         })
