@@ -1,5 +1,5 @@
 <template>
-  <Header @logout="logout" />
+  <Header />
   <NoteList />
 </template>
 
@@ -7,7 +7,6 @@
 import useRequest from "../composables/useRequest";
 import {watch} from "vue";
 import {useUserStore} from "../stores/user";
-import router from "../router";
 import NoteList from "../components/NoteList.vue"
 import Header from "../components/Header.vue"
 
@@ -22,16 +21,9 @@ watch(response, (newResponse) => {
       const responseData = newResponse.data.data
       userStore.setName(responseData.name)
       userStore.setEmail(responseData.email)
-    } else if (checkMethodAndUrl('POST', 'logout')) {
-      userStore.logout()
-      router.push('/login')
     }
   } else if (newResponse.status === 'error' && newResponse.message !== '') {
     alert(newResponse.message)
   }
 })
-
-const logout = () => {
-  sendRequest('POST', 'logout')
-}
 </script>

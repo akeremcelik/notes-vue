@@ -10,7 +10,10 @@
         </span>
         <span v-else>
           <span class="m-2">{{ userStore.getName }}</span>
-          <button type="button" @click="emit('logout')" class="btn btn-outline-info">Logout</button>
+          <button type="button" @click="logout" class="btn btn-outline-info" :disabled="logoutStatementForButton">
+            Logout
+            <Spinner v-if="logoutStatementForButton" color="cyan" />
+          </button>
         </span>
       </div>
     </div>
@@ -19,10 +22,29 @@
 
 <script setup>
 import {useUserStore} from "../stores/user";
+import {watch, computed} from "vue";
+import router from "../router";
+import useRequest from "../composables/useRequest";
+import Spinner from "../components/Spinner.vue"
 
 const userStore = useUserStore()
+const {sendRequest, response, checkMethodAndUrl, isLoading} = useRequest()
 
-const emit = defineEmits(['logout'])
+const logout = () => {
+  sendRequest('POST', 'logout')
+}
+const logoutStatementForButton = computed(() => isLoading('POST', 'logout'))
+
+watch(response, (newResponse) => {
+  if (newResponse.status === 'success') {
+    if (checkMethodAndUrl('POST', 'logout')) {
+      userStore.logout()
+      router.push('/login')
+    }
+  } else if (newResponse.status === 'error' && newResponse.message !== '') {
+    alert(newResponse.message)
+  }
+})
 </script>
 
 <style scoped>
