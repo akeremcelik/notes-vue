@@ -1,40 +1,54 @@
 <template>
-  <div>
-    <form @submit.prevent="submitLoginForm">
-      <div>
-        <label>Email</label>
-        <br />
-        <input type="email" v-model="data.email" />
+  <div class="row">
+    <div class="d-flex justify-content-center align-items-center vh-100">
+      <div class="border border-secondary rounded p-5 col-3">
+        <form @submit.prevent="submitLoginForm">
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" v-model="data.email">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" v-model="data.password">
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary" :disabled="loginStatementForButton">
+              Login
+              <Spinner v-if="loginStatementForButton" />
+            </button>
+            <button type="button" class="btn btn-outline-primary" @click="autoLogin">Auto Login</button>
+          </div>
+          <div class="form-text">
+            Don't you have an account? <RouterLink to="/register">Register</RouterLink>
+          </div>
+        </form>
       </div>
-      <div>
-        <label>Password</label>
-        <br />
-        <input type="password" v-model="data.password" />
-      </div>
-      <div>
-        <button type="submit">Login</button>
-      </div>
-    </form>
-    <button type="button" @click="autoLogin">Auto Login</button>
+    </div>
   </div>
 </template>
 
 <script setup>
-import {reactive, watch} from "vue";
+import {reactive, watch, computed} from "vue";
 import useRequest from "../composables/useRequest.js"
 import {useUserStore} from "../stores/user";
 import router from "../router";
+import Spinner from "../components/Spinner.vue"
 
 const data = reactive({
   email: '',
   password: ''
 })
-const {sendRequest, response} = useRequest()
+const {sendRequest, response, isLoading} = useRequest()
 const userStore = useUserStore()
 
 const submitLoginForm = () => {
   sendRequest('POST', 'login', data, false)
 }
+const loginStatementForButton = computed(() => isLoading('POST', 'login'))
 
 watch(response, (newResponse) => {
   if (newResponse.status === 'success') {
@@ -56,5 +70,7 @@ const autoLogin = () => {
 </script>
 
 <style scoped>
-
+a {
+  text-decoration: none;
+}
 </style>
