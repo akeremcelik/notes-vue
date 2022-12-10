@@ -1,7 +1,7 @@
 <template>
   <div class="col">
     <div class="card h-100">
-      <div class="card-body">
+      <div class="card-body" style="min-height: 200px;">
         <h5 class="card-title">{{name}}</h5>
         <p class="card-text">{{content}}</p>
       </div>
