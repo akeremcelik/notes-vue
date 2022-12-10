@@ -10,7 +10,7 @@
         </span>
         <span v-else>
           <span class="m-2">{{ userStore.getName }}</span>
-          <button type="button" @click="logout" class="btn btn-outline-info" :disabled="logoutStatementForButton">
+          <button type="button" @click="logout" class="btn btn-outline-danger" :disabled="logoutStatementForButton">
             Logout
             <Spinner v-if="logoutStatementForButton" color="cyan" />
           </button>

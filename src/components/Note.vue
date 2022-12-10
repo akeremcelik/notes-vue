@@ -12,7 +12,7 @@
             <Icon name="IconTrash" width="18" height="18" color="red" />
           </button>
           <button class="btn p-0" @click="emit('toggleNoteModalActivity', id)">
-            <Icon name="IconPencil" width="18" height="18" color="green" />
+            <Icon name="IconPencil" width="18" height="18" color="blue" />
           </button>
         </div>
       </div>

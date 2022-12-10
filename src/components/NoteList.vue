@@ -3,7 +3,7 @@
   <div class="p-5">
     <div class="d-flex justify-content-between">
       <h4 class="text-secondary">Note List</h4>
-      <div class="btn btn-outline-primary mb-1" v-if="noteStore.getNotes" @click="toggleNoteModalActivity()">+</div>
+      <div class="btn btn-success mb-1" v-if="noteStore.getNotes" @click="toggleNoteModalActivity()">+</div>
     </div>
     <div v-if="isLoading('GET', 'notes')">
       Loading...
