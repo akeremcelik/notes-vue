@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="d-flex justify-content-center align-items-center vh-100">
-      <div class="border border-secondary rounded p-5 col-3">
+      <div class="border border-secondary rounded p-5 col-sm-6 col-lg-3 col-12">
         <form @submit.prevent="submitLoginForm">
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Email address</label>
