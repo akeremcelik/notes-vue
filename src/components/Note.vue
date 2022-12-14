@@ -27,6 +27,7 @@ import Swal from 'sweetalert2'
 import useRequest from "../composables/useRequest";
 import {useNoteStore} from "../stores/note";
 import {watch, ref, nextTick} from "vue";
+import { useToast } from "vue-toastification";
 
 const {id, name, content, updated_at} = defineProps(['id', 'name', 'content', 'updated_at'])
 const emit = defineEmits(['toggleNoteModalActivity'])
@@ -34,6 +35,7 @@ const emit = defineEmits(['toggleNoteModalActivity'])
 const {sendRequest, response, checkMethodAndUrl} = useRequest()
 const noteStore = useNoteStore()
 const selectedNoteId = ref()
+const toast = useToast()
 
 const showAlert = (id, name) => {
   Swal.fire({
@@ -58,15 +60,7 @@ watch(response, (newResponse) => {
   if (newResponse.status === 'success') {
     if (checkMethodAndUrl('DELETE', `notes/${selectedNoteId.value}`)) {
       noteStore.deleteNote(selectedNoteId.value)
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'The note has been deleted',
-        showConfirmButton: false,
-        timer: 1000,
-        width: '350px',
-        height: '150px'
-      })
+      toast.success('The note has been deleted')
     }
   }
 })

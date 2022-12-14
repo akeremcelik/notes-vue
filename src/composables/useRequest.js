@@ -1,6 +1,7 @@
 import {reactive} from "vue";
 import {useUserStore} from "../stores/user";
 import router from "../router";
+import { useToast } from "vue-toastification";
 
 export default function useRequest() {
     const API_URL = import.meta.env.VITE_API_URL
@@ -22,6 +23,8 @@ export default function useRequest() {
         response.params = {}
     }
 
+    const toast = useToast();
+
     const sendRequest = (method, url, data = {}, auth = true) => {
         const userStore = useUserStore()
 
@@ -42,12 +45,23 @@ export default function useRequest() {
 
         fetch(`${API_URL}/${url}`, options).then((res) => {
             if (res.status === 401) {
-                userStore.logout()
-                router.push('/login')
+                if (router.currentRoute.value.name === 'login') {
+                    res.json().then((res) => {
+                        toast.error(res.message)
+                    })
+                    resetResponse()
+                } else {
+                    toast.info('Please login again')
+                    userStore.logout()
+                    router.push('/login')
+                }
             } else {
                 let status = (res.ok ? 'success' : 'error')
                 res.json().then((res) => {
                     status === 'success' ? (response.data = res) : (response.message = res.message)
+                    if (status === 'error') {
+                        toast.error(res.message)
+                    }
                 }).finally(() => response.status = status)
             }
         })

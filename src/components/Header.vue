@@ -41,8 +41,6 @@ watch(response, (newResponse) => {
       userStore.logout()
       router.push('/login')
     }
-  } else if (newResponse.status === 'error' && newResponse.message !== '') {
-    alert(newResponse.message)
   }
 })
 </script>

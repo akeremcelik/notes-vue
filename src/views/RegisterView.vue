@@ -54,8 +54,6 @@ const registerStatementForButton = computed(() => isLoading('POST', 'register'))
 watch(response, (newResponse) => {
   if (newResponse.status === 'success') {
     router.push('/login')
-  } else if (newResponse.status === 'error' && newResponse.message !== '') {
-    alert(newResponse.message)
   }
 })
 </script>

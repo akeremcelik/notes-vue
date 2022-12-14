@@ -39,8 +39,8 @@
 import {useNoteStore} from "../stores/note";
 import {reactive, watch, computed, ref} from "vue"
 import useRequest from "../composables/useRequest";
-import Swal from 'sweetalert2'
 import Spinner from "../components/Spinner.vue"
+import { useToast } from "vue-toastification";
 
 const emit = defineEmits(['toggleNoteModalActivity'])
 const props = defineProps(['id', 'activity'])
@@ -52,6 +52,7 @@ const note = reactive({
 })
 const noteFirstName = ref('')
 const {sendRequest, response, checkMethodAndUrl, isLoading} = useRequest()
+const toast = useToast()
 
 const submitNoteModalForm = () => {
   if (props.id) {
@@ -67,26 +68,10 @@ watch(response, (newResponse) => {
   if (newResponse.status === 'success') {
     if (checkMethodAndUrl('PATCH', `notes/${props.id}`)) {
       noteStore.updateNote(props.id, note)
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'The note has been updated',
-        showConfirmButton: false,
-        timer: 1000,
-        width: '350px',
-        height: '150px'
-      })
+      toast.success('The note has been updated')
     } else if (checkMethodAndUrl('POST', `notes`)) {
       noteStore.addNote({...note, id: newResponse.data.data.id, updated_at: newResponse.data.data.updated_at})
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'The note has been created',
-        showConfirmButton: false,
-        timer: 1000,
-        width: '350px',
-        height: '150px'
-      })
+      toast.success('The note has been created')
     }
     emit('toggleNoteModalActivity')
   }

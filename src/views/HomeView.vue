@@ -22,8 +22,6 @@ watch(response, (newResponse) => {
       userStore.setName(responseData.name)
       userStore.setEmail(responseData.email)
     }
-  } else if (newResponse.status === 'error' && newResponse.message !== '') {
-    alert(newResponse.message)
   }
 })
 </script>
