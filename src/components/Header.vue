@@ -26,9 +26,11 @@ import {watch, computed} from "vue";
 import router from "../router";
 import useRequest from "../composables/useRequest";
 import Spinner from "../components/Spinner.vue"
+import {useToast} from "vue-toastification";
 
 const userStore = useUserStore()
 const {sendRequest, response, checkMethodAndUrl, isLoading} = useRequest()
+const toast = useToast()
 
 const logout = () => {
   sendRequest('POST', 'logout')
@@ -38,6 +40,7 @@ const logoutStatementForButton = computed(() => isLoading('POST', 'logout'))
 watch(response, (newResponse) => {
   if (newResponse.status === 'success') {
     if (checkMethodAndUrl('POST', 'logout')) {
+      toast.success('Logged out')
       userStore.logout()
       router.push('/login')
     }
