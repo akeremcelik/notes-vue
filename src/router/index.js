@@ -10,6 +10,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
+      meta: { title: 'Home' },
       component: HomeView
     },
     {
@@ -23,11 +24,13 @@ const router = createRouter({
     {
       path: '/register',
       name: 'register',
+      meta: { title: 'Register' },
       component: RegisterView
     },
     {
       path: '/login',
       name: 'login',
+      meta: { title: 'Login' },
       component: LoginView
     },
   ]
@@ -40,6 +43,8 @@ router.beforeEach(async (to, from) => {
   if (protectedRoutes.includes(to.name) && !userStore.isLoggedIn) {
     return { name: 'login' }
   }
+
+  document.title = to.meta.title ?? 'Note Project'
 })
 
 export default router
