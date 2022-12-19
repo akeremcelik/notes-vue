@@ -1,6 +1,14 @@
 <template>
   <Header />
-  <NoteList />
+
+  <Suspense>
+    <NoteList />
+    <template #fallback>
+      <div class="p-5">
+        Loading...
+      </div>
+    </template>
+  </Suspense>
 </template>
 
 <script setup>

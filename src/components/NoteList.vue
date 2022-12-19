@@ -5,13 +5,8 @@
       <h4 class="text-secondary">Note List</h4>
       <div class="btn btn-success mb-1" v-if="noteStore.getNotes" @click="toggleNoteModalActivity()">+</div>
     </div>
-    <div v-if="isLoading('GET', 'notes')">
-      Loading...
-    </div>
-    <div v-else-if="noteStore.getNotes">
-      <div class="row row-cols-1 row-cols-md-4 g-4">
-        <Note v-for="note in noteStore.getNotes" :id="note.id" :name="note.name" :content="note.content" :updated_at="note.updated_at" @toggleNoteModalActivity="toggleNoteModalActivity" />
-      </div>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+      <Note v-for="note in noteStore.getNotes" :id="note.id" :name="note.name" :content="note.content" :updated_at="note.updated_at" @toggleNoteModalActivity="toggleNoteModalActivity" />
     </div>
   </div>
 </template>
