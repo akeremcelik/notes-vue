@@ -13,7 +13,8 @@ import Header from "../components/Header.vue"
 const {sendRequest, response, checkMethodAndUrl} = useRequest()
 const userStore = useUserStore()
 
-sendRequest('GET', 'user')
+if (userStore.getName === null)
+  sendRequest('GET', 'user')
 
 watch(response, (newResponse) => {
   if (newResponse.status === 'success') {
