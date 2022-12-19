@@ -5,7 +5,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLongTitle">{{noteFirstName ? noteFirstName : 'Create New Note'}}</h5>
-            <button type="button" class="close border-0" data-dismiss="modal" aria-label="Close" @click="emit('toggleNoteModalActivity')">
+            <button type="button" class="close border-0" data-dismiss="modal" aria-label="Close" @click="toggleNoteModalActivity">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -13,16 +13,22 @@
             <form>
               <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" v-model="note.name">
+                <input type="text" class="form-control" id="name" v-model="note.name" :class="{'border-danger': v$.name.$error}">
+                <div v-if="v$.name.$error" class="text-danger">
+                  * {{v$.name.$errors[0].$message}}
+                </div>
               </div>
               <div class="form-group">
                 <label for="content">Content</label>
-                <textarea class="form-control" id="content" v-model="note.content" rows="7" />
+                <textarea class="form-control" id="content" v-model="note.content" rows="7" :class="{'border-danger': v$.content.$error}" />
+                <div v-if="v$.content.$error" class="text-danger">
+                  * {{v$.content.$errors[0].$message}}
+                </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" :class="{'disabled': disabledStatementForButton}" data-dismiss="modal" @click="emit('toggleNoteModalActivity')">Close</button>
+            <button type="button" class="btn btn-secondary" :class="{'disabled': disabledStatementForButton}" data-dismiss="modal" @click="toggleNoteModalActivity">Close</button>
             <button type="button" class="btn" :class="{'btn-primary': props.id, 'btn-success': !props.id, 'disabled': disabledStatementForButton}" @click="submitNoteModalForm">
               {{props.id ? 'Update' : 'Create'}}
               <Spinner v-if="disabledStatementForButton" />
@@ -41,6 +47,8 @@ import {reactive, watch, computed, ref} from "vue"
 import useRequest from "../composables/useRequest";
 import Spinner from "../components/Spinner.vue"
 import { useToast } from "vue-toastification";
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 
 const emit = defineEmits(['toggleNoteModalActivity'])
 const props = defineProps(['id', 'activity'])
@@ -53,16 +61,29 @@ const note = reactive({
 const noteFirstName = ref('')
 const {sendRequest, response, checkMethodAndUrl, isLoading} = useRequest()
 const toast = useToast()
+const rules = {
+  name: { required },
+  content: { required },
+}
+const v$ = useVuelidate(rules, note)
 
-const submitNoteModalForm = () => {
-  if (props.id) {
-    sendRequest('PATCH', `notes/${props.id}`, note)
-  } else {
-    sendRequest('POST', `notes`, note)
+const submitNoteModalForm = async () => {
+  const validationResult = await v$.value.$validate()
+  if (validationResult) {
+    if (props.id) {
+      sendRequest('PATCH', `notes/${props.id}`, note)
+    } else {
+      sendRequest('POST', `notes`, note)
+    }
   }
 }
 
 const disabledStatementForButton = computed(() => props.id ? isLoading('PATCH', `notes/${props.id}`) : isLoading('POST', `notes`))
+
+const toggleNoteModalActivity = () => {
+  v$.value.$reset()
+  emit('toggleNoteModalActivity')
+}
 
 watch(response, (newResponse) => {
   if (newResponse.status === 'success') {
@@ -73,7 +94,7 @@ watch(response, (newResponse) => {
       noteStore.addNote({...note, id: newResponse.data.data.id, updated_at: newResponse.data.data.updated_at})
       toast.success('The note has been created')
     }
-    emit('toggleNoteModalActivity')
+    toggleNoteModalActivity()
   }
 })
 
