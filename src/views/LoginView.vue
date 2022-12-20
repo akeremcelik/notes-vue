@@ -5,11 +5,17 @@
         <form @submit.prevent="submitLoginForm">
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" v-model="data.email">
+            <input type="email" class="form-control" id="exampleInputEmail1" v-model="data.email" :class="{'border-danger': v$.email.$error}">
+            <div v-if="v$.email.$error" class="text-danger">
+              * {{v$.email.$errors[0].$message}}
+            </div>
           </div>
           <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" v-model="data.password">
+            <input type="password" class="form-control" id="exampleInputPassword1" v-model="data.password" :class="{'border-danger': v$.password.$error}">
+            <div v-if="v$.password.$error" class="text-danger">
+              * {{v$.password.$errors[0].$message}}
+            </div>
           </div>
           <div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -37,6 +43,8 @@ import useRequest from "../composables/useRequest.js"
 import {useUserStore} from "../stores/user";
 import router from "../router";
 import Spinner from "../components/Spinner.vue"
+import { useVuelidate } from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
 
 const data = reactive({
   email: '',
@@ -44,9 +52,17 @@ const data = reactive({
 })
 const {sendRequest, response, isLoading} = useRequest()
 const userStore = useUserStore()
+const rules = {
+  email: { required, email },
+  password: { required },
+}
+const v$ = useVuelidate(rules, data)
 
-const submitLoginForm = () => {
-  sendRequest('POST', 'login', data, false)
+const submitLoginForm = async () => {
+  const validationResult = await v$.value.$validate()
+  if (validationResult) {
+    sendRequest('POST', 'login', data, false)
+  }
 }
 const loginStatementForButton = computed(() => isLoading('POST', 'login'))
 
